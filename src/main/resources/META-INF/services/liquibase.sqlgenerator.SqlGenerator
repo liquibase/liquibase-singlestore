@@ -1,0 +1,2 @@
+liquibase.ext.singlestore.sqlgenerator.AddForeignKeyConstraintGeneratorSingleStore
+liquibase.ext.singlestore.sqlgenerator.DropForeignKeyConstraintGeneratorSingleStore

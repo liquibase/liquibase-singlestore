@@ -1,0 +1,21 @@
+{
+  "snapshot": {
+    "objects": {
+      "liquibase.structure.core.Table": [
+        {
+          "table": {
+            "name": "view_table"
+          }
+        }
+      ],
+      "liquibase.structure.core.View": [
+        {
+          "view": {
+            "definition": "SELECT `view_table`.`test_column` AS `test_column` FROM `view_table` as `view_table`  /*!90623 OPTION(CLIENT_FOUND_ROWS=1)*/",
+            "name": "test_view"
+          }
+        }
+      ]
+    }
+  }
+}
