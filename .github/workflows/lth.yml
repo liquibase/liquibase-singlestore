@@ -2,6 +2,9 @@ name: Liquibase Test Harness
 
 on:
   pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
   liquibase-test-harness:
