@@ -75,11 +75,6 @@
             <version>${liquibase.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-commercial</artifactId>
-            <version>${liquibase.version}</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -244,6 +239,36 @@
                 <artifactId>liquibase-sdk-maven-plugin</artifactId>
                 <version>0.10.20</version>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.4.1</version>
+                <configuration>
+                    <embedBuildProfileDependencies>true</embedBuildProfileDependencies>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>ossrh</flattenMode>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <flattenedPomFilename>${project.artifactId}-${project.version}.pom</flattenedPomFilename>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
     </build>
