@@ -16,6 +16,14 @@
         <url>http://www.liquibase.com</url>
     </organization>
 
+    <developers>
+        <developer>
+            <id>liquibase</id>
+            <name>Liquibase Team</name>
+            <email>answers@liquibase.com</email>
+        </developer>
+    </developers>
+
     <licenses>
         <license>
             <url>http://www.apache.org/licenses/LICENSE-2.0</url>
