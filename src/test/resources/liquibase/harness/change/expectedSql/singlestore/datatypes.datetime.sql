@@ -1,0 +1,1 @@
+CREATE TABLE lbcat.`datatypes.datetime_test_table` (date date NULL, datetime datetime NULL, timestamp timestamp NULL, year YEAR NULL, time time NULL)
