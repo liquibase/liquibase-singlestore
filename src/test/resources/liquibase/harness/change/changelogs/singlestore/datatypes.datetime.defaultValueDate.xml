@@ -11,22 +11,7 @@
             <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="p0" type="DATETIME(0)" defaultValueDate="CURRENT_TIMESTAMP(0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="p1" type="DATETIME(1)" defaultValueDate="CURRENT_TIMESTAMP(1)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="p2" type="DATETIME(2)" defaultValueDate="CURRENT_TIMESTAMP(2)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="p3" type="DATETIME(3)" defaultValueDate="CURRENT_TIMESTAMP(3)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="p4" type="DATETIME(4)" defaultValueDate="CURRENT_TIMESTAMP(4)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="p5" type="DATETIME(5)" defaultValueDate="CURRENT_TIMESTAMP(5)">
+            <column name="p0" type="DATETIME(0)" defaultValueDate="CURRENT_TIMESTAMP()">
                 <constraints nullable="false"/>
             </column>
             <column name="p6" type="DATETIME(6)" defaultValueDate="CURRENT_TIMESTAMP(6)">
@@ -40,22 +25,7 @@
             <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="p0" type="TIMESTAMP(0)" defaultValueDate="CURRENT_TIMESTAMP(0)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="p1" type="TIMESTAMP(1)" defaultValueDate="CURRENT_TIMESTAMP(1)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="p2" type="TIMESTAMP(2)" defaultValueDate="CURRENT_TIMESTAMP(2)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="p3" type="TIMESTAMP(3)" defaultValueDate="CURRENT_TIMESTAMP(3)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="p4" type="TIMESTAMP(4)" defaultValueDate="CURRENT_TIMESTAMP(4)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="p5" type="TIMESTAMP(5)" defaultValueDate="CURRENT_TIMESTAMP(5)">
+            <column name="p0" type="TIMESTAMP(0)" defaultValueDate="CURRENT_TIMESTAMP()">
                 <constraints nullable="false"/>
             </column>
             <column name="p6" type="TIMESTAMP(6)" defaultValueDate="CURRENT_TIMESTAMP(6)">

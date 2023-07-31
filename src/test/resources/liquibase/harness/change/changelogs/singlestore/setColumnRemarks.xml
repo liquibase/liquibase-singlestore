@@ -6,12 +6,12 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
     <changeSet id="1" author="as">
     <setColumnRemarks columnName="id"
-                      columnDataType="int(11)"
+                      columnDataType="int(11) AUTO_INCREMENT"
                       remarks="A Test Column Remark"
                       tableName="authors"/>
     <rollback>
         <setColumnRemarks columnName="id"
-                          columnDataType="int(11)"
+                          columnDataType="int(11) AUTO_INCREMENT"
                           remarks=""
                           tableName="authors"/>
     </rollback>

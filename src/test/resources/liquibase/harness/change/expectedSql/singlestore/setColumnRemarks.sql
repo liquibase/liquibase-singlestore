@@ -1,0 +1,1 @@
+ALTER TABLE lbcat.authors MODIFY COLUMN id INT AUTO_INCREMENT COMMENT 'A Test Column Remark'
