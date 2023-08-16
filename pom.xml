@@ -5,7 +5,7 @@
 
     <groupId>org.liquibase.ext</groupId>
     <artifactId>liquibase-singlestore</artifactId>
-    <version>4.19.2-SNAPSHOT</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <name>Liquibase Extension: SingleStore support</name>
     <description>Add this Liquibase extension to your project to support SingleStore</description>
@@ -15,6 +15,14 @@
         <name>Liquibase</name>
         <url>http://www.liquibase.com</url>
     </organization>
+
+    <developers>
+        <developer>
+            <id>liquibase</id>
+            <name>Liquibase Team</name>
+            <email>answers@liquibase.com</email>
+        </developer>
+    </developers>
 
     <licenses>
         <license>
@@ -39,10 +47,10 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <liquibase.version>4.23.0</liquibase.version>
+        <liquibase.version>4.23.1</liquibase.version>
         <liquibase.sdk.github.token>${env.GITHUB_TOKEN}</liquibase.sdk.github.token>
         <spock.version>1.3-groovy-2.4</spock.version>
-        <groovy.version>2.4.17</groovy.version>
+        <groovy.version>2.4.21</groovy.version>
 
         <sonar.organization>liquibase</sonar.organization>
         <sonar.projectKey>liquibase_${project.artifactId}</sonar.projectKey>
@@ -75,11 +83,6 @@
             <version>${liquibase.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-commercial</artifactId>
-            <version>${liquibase.version}</version>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -100,13 +103,13 @@
         <dependency>
             <groupId>com.singlestore</groupId>
             <artifactId>singlestore-jdbc-client</artifactId>
-            <version>1.1.4</version>
+            <version>1.1.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
-            <version>8.0.32</version>
+            <version>8.0.33</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -134,7 +137,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.3.1</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
                 </configuration>
@@ -166,7 +169,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <configuration>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <reportFormat>plain</reportFormat>
@@ -184,7 +187,7 @@
                 <configuration>
                     <attach>true</attach>
                     <author>false</author>
-                    <doctitle>Liquibase YugabyteDB ${version} API</doctitle>
+                    <doctitle>Liquibase SingleStoreDB ${version} API</doctitle>
                     <quiet>true</quiet>
                     <doclint>none</doclint>
                     <encoding>UTF-8</encoding>
@@ -220,7 +223,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
+                <version>0.8.10</version>
                 <configuration>
                     <fileSets>
                         <fileSet>
@@ -244,6 +247,36 @@
                 <artifactId>liquibase-sdk-maven-plugin</artifactId>
                 <version>0.10.20</version>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.4.1</version>
+                <configuration>
+                    <embedBuildProfileDependencies>true</embedBuildProfileDependencies>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>ossrh</flattenMode>
+                    <outputDirectory>${project.build.directory}</outputDirectory>
+                    <flattenedPomFilename>${project.artifactId}-${project.version}.pom</flattenedPomFilename>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
 
     </build>

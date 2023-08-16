@@ -2,11 +2,17 @@ name: Liquibase Test Harness
 
 on:
   pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
   liquibase-test-harness:
     name: Liquibase Test Harness
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+
     env:
       SINGLESTORE_LICENSE: ${{ secrets.SINGLESTORE_LICENSE }}
 
