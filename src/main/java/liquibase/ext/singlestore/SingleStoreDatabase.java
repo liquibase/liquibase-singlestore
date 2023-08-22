@@ -1,20 +1,21 @@
 package liquibase.ext.singlestore;
 
-import liquibase.database.DatabaseConnection;
-import liquibase.database.core.MySQLDatabase;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.DatabaseException;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import liquibase.database.DatabaseConnection;
+import liquibase.database.core.MariaDBDatabase;
+import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.DatabaseException;
 
-public class SingleStoreDatabase extends MySQLDatabase {
+public class SingleStoreDatabase extends MariaDBDatabase {
 
     public static final String PRODUCT_NAME = "SingleStore";
 
     public SingleStoreDatabase() {
-
+        super.sequenceNextValueFunction = null;
+        super.unmodifiableDataTypes = new ArrayList<>();
     }
 
     @Override
@@ -57,5 +58,13 @@ public class SingleStoreDatabase extends MySQLDatabase {
         return super.getDefaultDriver(url);
     }
 
+    @Override
+    protected String getMinimumVersionForFractionalDigitsForTimestamp() {
+      return "6.8.0";
+    }
 
+    @Override
+    public boolean supportsSequences() {
+      return false;
+    }
 }

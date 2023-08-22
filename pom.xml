@@ -173,6 +173,9 @@
                 <configuration>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <reportFormat>plain</reportFormat>
+                    <systemPropertyVariables>
+                        <snapshotObjects>addColumn,createIndex,createTable,createView,snapshotCaalogAndSchema</snapshotObjects>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
             <plugin>
