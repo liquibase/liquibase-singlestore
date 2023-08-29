@@ -1,0 +1,56 @@
+{
+  "snapshot": {
+    "objects": {
+      "liquibase.structure.core.Table": [
+        {
+          "table": {
+            "name": "table_datetime"
+          }
+        },
+        {
+          "table": {
+            "name": "table_timestamp"
+          }
+        }
+      ],
+      "liquibase.structure.core.Column": [
+        {
+          "column": {
+            "defaultValue": "CURRENT_TIMESTAMP\\!\\{liquibase.statement.DatabaseFunction\\}",
+            "name": "p0",
+            "type": {
+              "typeName": "DATETIME"
+            }
+          }
+        },
+        {
+          "column": {
+            "defaultValue": "CURRENT_TIMESTAMP\\!\\{liquibase.statement.DatabaseFunction\\}",
+            "name": "p0",
+            "type": {
+              "typeName": "TIMESTAMP"
+            }
+          }
+        },
+        {
+          "column": {
+            "defaultValue": "CURRENT_TIMESTAMP\\!\\{liquibase.statement.DatabaseFunction\\}",
+            "name": "p6",
+            "type": {
+              "typeName": "DATETIME"
+            }
+          }
+        },
+        {
+          "column": {
+            "defaultValue": "CURRENT_TIMESTAMP\\!\\{liquibase.statement.DatabaseFunction\\}",
+            "name": "p6",
+            "type": {
+              "typeName": "TIMESTAMP"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

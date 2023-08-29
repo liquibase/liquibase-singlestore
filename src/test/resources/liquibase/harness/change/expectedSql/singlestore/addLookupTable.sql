@@ -1,0 +1,1 @@
+CREATE TABLE lbcat.authors_data AS SELECT DISTINCT email AS authors_email FROM lbcat.authors WHERE email IS NOT NULL

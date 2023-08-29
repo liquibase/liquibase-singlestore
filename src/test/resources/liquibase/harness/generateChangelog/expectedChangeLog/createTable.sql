@@ -1,0 +1,5 @@
+-- liquibase formatted sql
+
+CREATE TABLE test_table_xml (test_column INT NULL);
+
+ALTER TABLE DATABASECHANGELOGLOCK ADD CONSTRAINT `PRIMARY` UNIQUE (ID);
