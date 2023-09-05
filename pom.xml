@@ -36,7 +36,7 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:git:http://github.com/liquibase/liquibase-singlestore.git</connection>
+        <connection>scm:git:https://github.com/liquibase/liquibase-singlestore.git</connection>
         <url>https://github.com/liquibase/liquibase-singlestore</url>
         <tag>HEAD</tag>
     </scm>
