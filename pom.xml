@@ -2,6 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-parent-pom</artifactId>
+        <version>0.3.1</version> <!-- Replace with the desired version -->
+    </parent>
+
     <groupId>org.liquibase.ext</groupId>
     <artifactId>liquibase-singlestore</artifactId>
     <version>1.0.2-SNAPSHOT</version>
@@ -9,30 +15,6 @@
     <name>Liquibase Extension: SingleStore support</name>
     <description>Add this Liquibase extension to your project to support SingleStore</description>
     <url>https://github.com/liquibase/liquibase-singlestore</url>
-
-    <organization>
-        <name>Liquibase</name>
-        <url>http://www.liquibase.com</url>
-    </organization>
-
-    <developers>
-        <developer>
-            <id>liquibase</id>
-            <name>Liquibase Team</name>
-            <email>answers@liquibase.com</email>
-        </developer>
-    </developers>
-
-    <licenses>
-        <license>
-            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-            <name>Apache License, Version 2.0</name>
-        </license>
-    </licenses>
-
-    <issueManagement>
-        <url>https://github.com/liquibase/liquibase-singlestore/issues</url>
-    </issueManagement>
 
     <scm>
         <connection>scm:git:${project.scm.url}</connection>
@@ -42,26 +24,12 @@
 	</scm>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-
-        <liquibase.version>4.23.1</liquibase.version>
-        <liquibase.sdk.github.token>${env.GITHUB_TOKEN}</liquibase.sdk.github.token>
-        <spock.version>1.3-groovy-2.4</spock.version>
-        <groovy.version>2.4.21</groovy.version>
-
-        <sonar.organization>liquibase</sonar.organization>
-        <sonar.projectKey>liquibase_${project.artifactId}</sonar.projectKey>
-        <sonar.projectName>${project.name}</sonar.projectName>
-        <sonar.projectDescription>${project.description}</sonar.projectDescription>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.scm.provider>git</sonar.scm.provider>
-        <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
-        <sonar.sources>src/main/java</sonar.sources>
-        <sonar.tests>src/test/groovy</sonar.tests>
-        <jacoco.fileset.directory>target</jacoco.fileset.directory>
+        <liquibase.version>4.24.0</liquibase.version>
+        <dependency.spock.version>1.3-groovy-2.4</dependency.spock.version>
+        <groovy-all.version>2.4.17</groovy-all.version>
+        <liquibase.version>4.24.0</liquibase.version>
+        <spock-core.version>1.3-groovy-2.4</spock-core.version>
+        <spock-reports.version>1.3.1</spock-reports.version>
     </properties>
 
     <dependencyManagement>
@@ -78,29 +46,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-            <version>4.13.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-test-harness</artifactId>
-            <version>1.0.9</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.spockframework</groupId>
-            <artifactId>spock-core</artifactId>
-            <version>${spock.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.singlestore</groupId>
             <artifactId>singlestore-jdbc-client</artifactId>
             <version>1.1.5</version>
@@ -113,22 +58,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>${groovy.version}</version>
-            <scope>test</scope>
-            <type>pom</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.codehaus.groovy</groupId>
-                    <artifactId>groovy-testng</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.skyscreamer</groupId>
-            <artifactId>jsonassert</artifactId>
-            <version>1.5.1</version>
+            <groupId>org.spockframework</groupId>
+            <artifactId>spock-core</artifactId>
+            <version>${dependency.spock.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -136,151 +68,18 @@
     <build>
         <plugins>
             <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.gmavenplus</groupId>
-                <artifactId>gmavenplus-plugin</artifactId>
-                <version>2.1.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>compileTests</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-                <configuration>
-                    <release>8</release>
-                    <optimize>true</optimize>
-                    <debug>true</debug>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit4</artifactId>
+                        <version>3.0.0</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
-                    <reportFormat>plain</reportFormat>
-                    <systemPropertyVariables>
-                        <snapshotObjects>addColumn,createIndex,createTable,createView,snapshotCaalogAndSchema</snapshotObjects>
-                    </systemPropertyVariables>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.3.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.5.0</version>
-                <configuration>
-                    <attach>true</attach>
-                    <author>false</author>
-                    <doctitle>Liquibase SingleStoreDB ${version} API</doctitle>
-                    <quiet>true</quiet>
-                    <doclint>none</doclint>
-                    <encoding>UTF-8</encoding>
-
-                    <includeDependencySources>false</includeDependencySources>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>javadoc-default</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.10</version>
-                <configuration>
-                    <fileSets>
-                        <fileSet>
-                            <directory>${jacoco.fileset.directory}</directory>
-                            <includes>
-                                <include>**/jacoco.exec</include>
-                            </includes>
-                        </fileSet>
-                    </fileSets>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.9.1.2184</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.liquibase.ext</groupId>
-                <artifactId>liquibase-sdk-maven-plugin</artifactId>
-                <version>0.10.20</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.4.1</version>
-                <configuration>
-                    <embedBuildProfileDependencies>true</embedBuildProfileDependencies>
-                    <updatePomFile>true</updatePomFile>
-                    <flattenMode>ossrh</flattenMode>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                    <flattenedPomFilename>${project.artifactId}-${project.version}.pom</flattenedPomFilename>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>flatten</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>flatten</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>flatten.clean</id>
-                        <phase>clean</phase>
-                        <goals>
-                            <goal>clean</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
-
     </build>
 </project>
