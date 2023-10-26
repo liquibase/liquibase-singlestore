@@ -35,10 +35,11 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:git:https://github.com/liquibase/liquibase-singlestore.git</connection>
-        <url>https://github.com/liquibase/liquibase-singlestore</url>
-        <tag>HEAD</tag>
-    </scm>
+        <connection>scm:git:${project.scm.url}</connection>
+        <developerConnection>scm:git:${project.scm.url}</developerConnection>
+		<url>https://github.com/liquibase/liquibase-singlestore.git</url>
+		<tag>HEAD</tag>
+	</scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
