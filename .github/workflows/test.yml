@@ -13,7 +13,7 @@ jobs:
     uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@v0.5.5
     secrets: inherit
     with:
-      java: '[11, 17, 18]'
+      java: '[11, 17, 21]'
 
   integration-test:
     needs: build-test
