@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-test:
-    uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@v0.4.1
+    uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@v0.5.7
     secrets: inherit
 
   integration-test:
@@ -36,3 +36,8 @@ jobs:
       - name: Stop SingleStore docker image
         working-directory: src/test/resources/
         run: docker-compose down
+
+  dependabot-automerge:
+    needs: build-test
+    uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@v0.5.7
+    secrets: inherit
