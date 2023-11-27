@@ -5,6 +5,7 @@
     <groupId>org.liquibase.ext</groupId>
     <artifactId>liquibase-singlestore</artifactId>
     <version>1.0.2-SNAPSHOT</version>
+    
 
     <name>Liquibase Extension: SingleStore support</name>
     <description>Add this Liquibase extension to your project to support SingleStore</description>
