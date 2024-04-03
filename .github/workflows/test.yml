@@ -28,14 +28,14 @@ jobs:
 
       - name: Start SingleStore docker image
         working-directory: src/test/resources/
-        run: docker-compose up -d
+        run: docker compose up -d
 
       - name: Run Tests With Maven
         run: mvn --quiet --show-version --batch-mode verify
 
       - name: Stop SingleStore docker image
         working-directory: src/test/resources/
-        run: docker-compose down
+        run: docker compose down
 
   dependabot-automerge:
     needs: build-test
