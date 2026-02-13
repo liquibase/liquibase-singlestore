@@ -1,0 +1,8 @@
+name: Sonar Check Stub
+
+on:
+  workflow_call:
+
+jobs:
+  sonar-pr:
+    uses: ./.github/workflows/sonar-scan-stub.yml
