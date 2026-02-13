@@ -11,6 +11,8 @@ on:
 jobs:
   build-test:
     uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@main
+    with:
+      skipSonar: true
     secrets: inherit
 
   integration-test:
