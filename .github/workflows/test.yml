@@ -9,35 +9,41 @@ on:
       - synchronize
 
 jobs:
-  build-test:
-    uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@v0.5.7
+  ci:
+    uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@main
+    with:
+      skipSonar: true
     secrets: inherit
 
+  build-test:
+    needs: ci
+    uses: ./.github/workflows/sonar-check-stub.yml
+
   integration-test:
-    needs: build-test
+    needs: ci
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           java-version: 17
           distribution: 'temurin'
           cache: 'maven'
 
       - name: Start SingleStore docker image
-        working-directory: src/test/resources/
+        working-directory: src/test/resources/docker
         run: docker compose up -d
 
       - name: Run Tests With Maven
         run: mvn --quiet --show-version --batch-mode verify
 
       - name: Stop SingleStore docker image
-        working-directory: src/test/resources/
+        working-directory: src/test/resources/docker
         run: docker compose down
 
   dependabot-automerge:
-    needs: build-test
-    uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@v0.5.7
+    needs: ci
+    uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@v0.7.8
     secrets: inherit

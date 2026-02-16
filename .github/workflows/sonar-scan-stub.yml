@@ -1,0 +1,12 @@
+name: Sonar Scan Stub
+
+on:
+  workflow_call:
+
+jobs:
+  sonar-pr:
+    name: Sonar Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip Sonar
+        run: echo "SonarCloud ALM integration not configured - skipping analysis"
