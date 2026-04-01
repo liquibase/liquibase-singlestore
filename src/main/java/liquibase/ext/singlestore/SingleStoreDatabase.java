@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
 import liquibase.database.DatabaseConnection;
 import liquibase.database.core.MariaDBDatabase;
 import liquibase.database.jvm.JdbcConnection;
@@ -66,5 +67,29 @@ public class SingleStoreDatabase extends MariaDBDatabase {
     @Override
     public boolean supportsSequences() {
       return false;
+    }
+
+    /**
+     * SingleStore can be reached via {@code jdbc:singlestore:}, {@code jdbc:mysql:}, or {@code jdbc:mariadb:} URLs.
+     * Normalize to {@code jdbc:singlestore:} so all produce the same target ID.
+     */
+    @Override
+    protected String resolveUrl(JdbcConnection jdbcConn) {
+        String url = super.resolveUrl(jdbcConn);
+        if (url != null) {
+            url = url.replace("jdbc:mariadb:", "jdbc:singlestore:");
+            url = url.replace("jdbc:mysql:", "jdbc:singlestore:");
+        }
+        return url;
+    }
+
+    /**
+     * When connected via MySQL or MariaDB drivers, {@code getDatabaseProductName()} may return
+     * "MySQL" or "MariaDB" instead of "SingleStore". Always return "SingleStore" for consistent
+     * target identification.
+     */
+    @Override
+    protected String resolveDatabaseProductName() {
+        return PRODUCT_NAME;
     }
 }
