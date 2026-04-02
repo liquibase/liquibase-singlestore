@@ -10,7 +10,7 @@ on:
 
 jobs:
   ci:
-    uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@main
+    uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@edd97d02f06000423043eee01ed751b055f92419 # main
     with:
       skipSonar: true
     secrets: inherit
@@ -23,10 +23,10 @@ jobs:
     needs: ci
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
           java-version: 17
           distribution: 'temurin'
@@ -45,5 +45,5 @@ jobs:
 
   dependabot-automerge:
     needs: ci
-    uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@v0.7.8
+    uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@afaacfdeb9cc754b4c3fc91a718be7283491b879 # v0.7.8
     secrets: inherit
