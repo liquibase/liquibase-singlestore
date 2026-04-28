@@ -1,9 +1,13 @@
 package liquibase.ext.singlestore;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Properties;
+import liquibase.Scope;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.core.MariaDBDatabase;
 import liquibase.database.jvm.JdbcConnection;
@@ -56,6 +60,77 @@ public class SingleStoreDatabase extends MariaDBDatabase {
             return "com.singlestore.jdbc.Driver";
         }
         return super.getDefaultDriver(url);
+    }
+
+    @Override
+    public void setConnection(final DatabaseConnection conn) {
+        DatabaseConnection connectionToUse = conn;
+        
+        // If a user creates a JDBC connection manually and passes it to Liquibase,
+        // this method will be called. Normally, a connection will be opened by
+        // Liquibase based on the connection URL configured. In that case, the
+        // SingleStoreConnection class will ensure connectionAttributes are set.
+        // However, when a user creates the connection programmatically and passes it to
+        // Liquibase, we need to check if connectionAttributes are missing and create
+        // a replacement connection with them.
+        if (!(conn instanceof SingleStoreConnection)
+            && conn instanceof JdbcConnection) {
+            JdbcConnection jdbcConn = (JdbcConnection) conn;
+            String url = jdbcConn.getURL();
+
+            // Prefer JDBC metadata URL (may include more than Liquibase's stripped getURL()).
+            String baseUrl;
+            try {
+                baseUrl = jdbcConn.getWrappedConnection().getMetaData().getURL();
+            } catch (SQLException e) {
+                baseUrl = url;
+            }
+            if (baseUrl == null) {
+                baseUrl = url;
+            }
+
+            if (url != null && url.startsWith("jdbc:singlestore")
+                && !SingleStoreConnection.hasLiquibaseConnectionAttributes(url)) {
+                try {
+                    String modifiedUrl = SingleStoreConnection.addConnectionAttributesToUrl(baseUrl);
+                    Connection replacement = openReplacementSingleStoreJdbcConnection(modifiedUrl, jdbcConn);
+                    connectionToUse = new SingleStoreConnection(
+                        replacement,
+                        conn  // Pass original connection so it gets closed when replacement is closed
+                    );
+                    
+                    Scope.getCurrentScope().getLog(getClass()).info(
+                        "Replaced manually-created connection with one that includes SingleStore connection attributes");
+                } catch (SQLException e) {
+                    // If we can't create a replacement connection, use the original
+                    Scope.getCurrentScope().getLog(getClass()).fine(
+                        "Could not add connection attributes to manually-created connection: " + e.getMessage());
+                }
+            }
+        }
+        
+        super.setConnection(connectionToUse);
+    }
+
+    /**
+     * Opens a JDBC connection using a modified URL, then retries with {@code user} in {@link Properties}
+     * when the URL-only attempt fails (e.g. credentials supplied only via properties on the original
+     * connection). Passwords that are not represented in the URL and not recoverable from the API may
+     * still require keeping the original connection.
+     */
+    private static Connection openReplacementSingleStoreJdbcConnection(String jdbcUrl, JdbcConnection jdbcConn)
+            throws SQLException {
+        try {
+            return DriverManager.getConnection(jdbcUrl);
+        } catch (SQLException urlOnlyFailure) {
+            String user = jdbcConn.getConnectionUserName();
+            if (user == null || user.isEmpty()) {
+                throw urlOnlyFailure;
+            }
+            Properties info = new Properties();
+            info.setProperty("user", user);
+            return DriverManager.getConnection(jdbcUrl, info);
+        }
     }
 
     @Override
