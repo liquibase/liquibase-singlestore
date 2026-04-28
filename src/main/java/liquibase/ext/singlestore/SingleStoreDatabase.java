@@ -1,10 +1,12 @@
 package liquibase.ext.singlestore;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Properties;
 import liquibase.Scope;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.core.MariaDBDatabase;
@@ -75,14 +77,25 @@ public class SingleStoreDatabase extends MariaDBDatabase {
             && conn instanceof JdbcConnection) {
             JdbcConnection jdbcConn = (JdbcConnection) conn;
             String url = jdbcConn.getURL();
-            
-            // Check if it's a SingleStore connection without connectionAttributes
-            if (url != null && url.startsWith("jdbc:singlestore") && !url.contains("connectionAttributes=")) {
-                // Create a replacement connection with connectionAttributes
+
+            // Prefer JDBC metadata URL (may include more than Liquibase's stripped getURL()).
+            String baseUrl;
+            try {
+                baseUrl = jdbcConn.getWrappedConnection().getMetaData().getURL();
+            } catch (SQLException e) {
+                baseUrl = url;
+            }
+            if (baseUrl == null) {
+                baseUrl = url;
+            }
+
+            if (url != null && url.startsWith("jdbc:singlestore")
+                && !SingleStoreConnection.hasLiquibaseConnectionAttributes(url)) {
                 try {
-                    String modifiedUrl = SingleStoreConnection.addConnectionAttributesToUrl(url);
+                    String modifiedUrl = SingleStoreConnection.addConnectionAttributesToUrl(baseUrl);
+                    Connection replacement = openReplacementSingleStoreJdbcConnection(modifiedUrl, jdbcConn);
                     connectionToUse = new SingleStoreConnection(
-                        DriverManager.getConnection(modifiedUrl),
+                        replacement,
                         conn  // Pass original connection so it gets closed when replacement is closed
                     );
                     
@@ -97,6 +110,27 @@ public class SingleStoreDatabase extends MariaDBDatabase {
         }
         
         super.setConnection(connectionToUse);
+    }
+
+    /**
+     * Opens a JDBC connection using a modified URL, then retries with {@code user} in {@link Properties}
+     * when the URL-only attempt fails (e.g. credentials supplied only via properties on the original
+     * connection). Passwords that are not represented in the URL and not recoverable from the API may
+     * still require keeping the original connection.
+     */
+    private static Connection openReplacementSingleStoreJdbcConnection(String jdbcUrl, JdbcConnection jdbcConn)
+            throws SQLException {
+        try {
+            return DriverManager.getConnection(jdbcUrl);
+        } catch (SQLException urlOnlyFailure) {
+            String user = jdbcConn.getConnectionUserName();
+            if (user == null || user.isEmpty()) {
+                throw urlOnlyFailure;
+            }
+            Properties info = new Properties();
+            info.setProperty("user", user);
+            return DriverManager.getConnection(jdbcUrl, info);
+        }
     }
 
     @Override

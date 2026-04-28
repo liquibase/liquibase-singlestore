@@ -5,7 +5,6 @@ import java.sql.Driver;
 import java.util.Properties;
 import java.util.ResourceBundle;
 import liquibase.Scope;
-import liquibase.configuration.LiquibaseConfiguration;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
@@ -39,6 +38,11 @@ public class SingleStoreConnection extends JdbcConnection {
     }
 
     @Override
+    public boolean supports(String url) {
+        return url != null && url.startsWith("jdbc:singlestore");
+    }
+
+    @Override
     public void close() throws DatabaseException {
         // Also close the original connection that this connection replaced.
         // This handles the case where a user manually creates a connection and passes it to
@@ -56,16 +60,25 @@ public class SingleStoreConnection extends JdbcConnection {
         // This method is called by Liquibase when a new connection is needed, BEFORE the
         // connection is actually established. We append connectionAttributes to the URL
         // so SingleStore can track that this connection is from Liquibase.
-        if (url != null && url.startsWith("jdbc:singlestore") && !url.contains("connectionAttributes=")) {
-            url = addConnectionAttributesToUrl(url);
-            
-            String liquibaseVersion = getLiquibaseVersion();
-            Scope.getCurrentScope().getLog(getClass()).info(
-                "Connecting to SingleStore with attributes: _connector_name=Liquibase, _connector_version=" + liquibaseVersion);
+        if (url != null && url.startsWith("jdbc:singlestore")) {
+            String urlWithAttributes = addConnectionAttributesToUrl(url);
+            if (!urlWithAttributes.equals(url)) {
+                String liquibaseVersion = getLiquibaseVersion();
+                Scope.getCurrentScope().getLog(getClass()).info(
+                    "Connecting to SingleStore with attributes: _connector_name=Liquibase, _connector_version=" + liquibaseVersion);
+            }
+            url = urlWithAttributes;
         }
         
         // Let parent class handle the actual connection creation with our modified url
         super.open(url, driverObject, driverProperties);
+    }
+
+    /**
+     * Returns true if the URL already includes Liquibase SingleStore connector attributes.
+     */
+    static boolean hasLiquibaseConnectionAttributes(String url) {
+        return url != null && url.contains("_connector_name:Liquibase");
     }
 
     /**
@@ -74,6 +87,9 @@ public class SingleStoreConnection extends JdbcConnection {
      * for manually-created connections.
      */
     static String addConnectionAttributesToUrl(String url) {
+        if (hasLiquibaseConnectionAttributes(url)) {
+            return url;
+        }
         String liquibaseVersion = getLiquibaseVersion();
         String connectionAttributes = "_connector_name:Liquibase,_connector_version:" + liquibaseVersion;
         
